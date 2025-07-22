@@ -30,24 +30,33 @@
 
     h1 {
       text-align: center;
+      position: relative;
     }
 
     .mode-toggle {
-      float: right;
-      margin-top: -10px;
+      position: absolute;
+      right: 0;
+      bottom: -10px;
       padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid var(--text-color);
       background-color: transparent;
       color: var(--text-color);
       cursor: pointer;
+      font-size: 13px;
     }
 
     .mode-note {
       font-size: 11px;
       text-align: right;
-      margin-top: 2px;
+      margin-top: 36px;
       color: var(--text-color);
+    }
+
+    .mode-note::after {
+      content: '브라우저를 끈 상태에서는 작동하지 않습니다.';
+      display: block;
+      margin-top: 2px;
     }
 
     #ship-status {
@@ -117,8 +126,17 @@
       margin-left: 6px;
     }
 
+    .floating-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 12px;
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+    }
+
     .test-button {
-      margin-top: 40px;
       padding: 8px 16px;
       font-size: 14px;
       border: none;
@@ -126,10 +144,11 @@
       color: white;
       border-radius: 6px;
       cursor: pointer;
+      display: block;
+      margin-bottom: 10px;
     }
 
     .volume-control {
-      margin-top: 10px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -150,15 +169,15 @@
       z-index: 999;
       box-shadow: 0 0 8px #00000066;
     }
-
   </style>
 </head>
 <body>
   <h1>
     미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑
     <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
-    <div class="mode-note">브라우저에서 알림 허용을 설정해야 알림이 표시됩니다.</div>
   </h1>
+
+  <div class="mode-note">브라우저에서 알림 허용을 설정해야 알림이 표시됩니다.</div>
 
   <div id="ship-status">
     <span>🛳️ 오늘 함선 완료 여부:</span>
@@ -236,17 +255,17 @@
     </div>
   </div>
 
-  <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
-
-  <div class="volume-control">
-    <label for="volume">🔊 알림 볼륨:</label>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+  <div class="floating-control">
+    <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
+    <div class="volume-control">
+      <label for="volume">🔊 알림 볼륨:</label>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+    </div>
   </div>
 
   <audio id="notify-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
 
   <script>
-    // 다크모드 토글
     function toggleMode() {
       const body = document.body;
       const btn = document.querySelector('.mode-toggle');
@@ -254,7 +273,6 @@
       btn.textContent = body.classList.contains("light") ? "☀️ 라이트 모드" : "🌙 다크 모드";
     }
 
-    // 함선 버튼
     document.getElementById("ship-toggle").addEventListener("click", function () {
       const btn = this;
       if (btn.textContent.includes("미완료")) {
@@ -266,14 +284,12 @@
       }
     });
 
-    // 전체 토글
     function toggleGroup(groupId) {
       const checkboxes = document.querySelectorAll(`#${groupId} input[type="checkbox"]`);
       const allChecked = [...checkboxes].every(c => c.checked);
       checkboxes.forEach(c => c.checked = !allChecked);
     }
 
-    // 알림 권한 요청
     if (Notification.permission !== "granted") {
       setTimeout(() => {
         alert("🔔 알림을 받기 위해 브라우저에서 알림 허용을 설정해주세요!");
@@ -281,14 +297,12 @@
       }, 500);
     }
 
-    // 알림 테스트
     function testNotification() {
       setTimeout(() => {
         notify("⏰ 테스트 알림입니다!");
       }, 5000);
     }
 
-    // 알림 함수 + 소리
     function notify(message) {
       if (Notification.permission === "granted") {
         new Notification(message);

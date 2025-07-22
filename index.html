@@ -34,13 +34,20 @@
 
     .mode-toggle {
       float: right;
-      margin-top: -35px;
+      margin-top: -10px;
       padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid var(--text-color);
       background-color: transparent;
       color: var(--text-color);
       cursor: pointer;
+    }
+
+    .mode-note {
+      font-size: 11px;
+      text-align: right;
+      margin-top: 2px;
+      color: var(--text-color);
     }
 
     #ship-status {
@@ -64,7 +71,6 @@
       display: flex;
       gap: 40px;
       flex-wrap: wrap;
-      justify-content: center;
     }
 
     .table-group {
@@ -84,18 +90,22 @@
       font-weight: bold;
     }
 
+    .group-title label {
+      font-size: 13px; /* 살짝 줄임 */
+    }
+
     table {
       width: 100%;
       font-size: 14px;
       border-collapse: collapse;
       background-color: var(--table-bg);
       color: var(--table-text);
-      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
     }
 
     td {
       padding: 6px 8px;
-      border-bottom: 1px solid #ddd;
     }
 
     td:first-child {
@@ -116,18 +126,39 @@
       color: white;
       border-radius: 6px;
       cursor: pointer;
-      float: right;
     }
 
     .volume-control {
       margin-top: 10px;
-      float: right;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+
+    .volume-control label {
+      font-size: 13px;
+    }
+
+    .popup {
+      background-color: #444;
+      color: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      box-shadow: 0 0 8px #00000066;
+    }
+
   </style>
 </head>
 <body>
-  <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</h1>
-  <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
+  <h1>
+    미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑
+    <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
+    <div class="mode-note">브라우저에서 알림 허용을 설정해야 알림이 표시됩니다.</div>
+  </h1>
 
   <div id="ship-status">
     <span>🛳️ 오늘 함선 완료 여부:</span>
@@ -206,12 +237,16 @@
   </div>
 
   <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
+
   <div class="volume-control">
-    <audio id="notify-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" controls preload="auto"></audio>
+    <label for="volume">🔊 알림 볼륨:</label>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
   </div>
 
+  <audio id="notify-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
+
   <script>
-    // 테마 전환
+    // 다크모드 토글
     function toggleMode() {
       const body = document.body;
       const btn = document.querySelector('.mode-toggle');
@@ -231,7 +266,7 @@
       }
     });
 
-    // 전체 체크 토글
+    // 전체 토글
     function toggleGroup(groupId) {
       const checkboxes = document.querySelectorAll(`#${groupId} input[type="checkbox"]`);
       const allChecked = [...checkboxes].every(c => c.checked);
@@ -253,13 +288,14 @@
       }, 5000);
     }
 
-    // 알림 + 소리
+    // 알림 함수 + 소리
     function notify(message) {
       if (Notification.permission === "granted") {
         new Notification(message);
-        const sound = document.getElementById("notify-sound");
-        sound.currentTime = 0;
-        sound.play();
+        const audio = document.getElementById("notify-sound");
+        audio.volume = document.getElementById("volume").value;
+        audio.currentTime = 0;
+        audio.play();
       }
     }
   </script>

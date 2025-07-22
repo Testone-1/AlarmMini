@@ -2,168 +2,199 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
   <style>
     :root {
-      --bg-color-light: #f5f5f5;
-      --text-color-light: #222;
-      --bg-color-dark: #1e1e1e;
-      --text-color-dark: #f0f0f0;
-      --accent-color: #3aa6ff;
+      --bg-color: #1e1e1e;
+      --text-color: #f0f0f0;
+      --box-bg: #2c2c2c;
+      --border-color: #444;
     }
-
+    body.light {
+      --bg-color: #f4f6f8;
+      --text-color: #111;
+      --box-bg: #fff;
+      --border-color: #ccc;
+    }
     body {
-      font-family: sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 2rem;
-      background-color: var(--bg-color-light);
-      color: var(--text-color-light);
+      padding: 20px;
       transition: background-color 0.3s, color 0.3s;
     }
-
-    body.dark {
-      background-color: var(--bg-color-dark);
-      color: var(--text-color-dark);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .content {
-      max-width: 600px;
-      margin: auto;
-    }
-
-    .section {
-      margin-bottom: 2rem;
-    }
-
-    .section h2 {
-      border-bottom: 2px solid var(--accent-color);
-      padding-bottom: 0.5rem;
-    }
-
-    label {
+    .header {
       display: flex;
       justify-content: space-between;
-      padding: 0.3rem 0;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
-
-    input[type="checkbox"] {
-      transform: scale(1.2);
-    }
-
-    #toggle-theme {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      cursor: pointer;
+    .mode-toggle {
+      background-color: transparent;
+      border: 1px solid var(--text-color);
+      color: var(--text-color);
+      padding: 6px 12px;
       border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
     }
-
-    #ship-status {
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .column {
+      flex: 1;
+      min-width: 300px;
+    }
+    .box {
+      background-color: var(--box-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .box h3 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .checkbox-group label {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 1rem;
-      border: 1px solid gray;
-      border-radius: 5px;
-      margin-bottom: 2rem;
-      background-color: #ddd;
+      margin: 6px 0;
+      font-size: 15px;
+      cursor: pointer;
     }
-
-    body.dark #ship-status {
-      background-color: #2a2a2a;
+    .checkbox-group input {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+    button.small {
+      font-size: 13px;
+      padding: 4px 8px;
+      margin-left: 8px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    body.light button.small {
+      background-color: #ddd;
+      color: #000;
     }
   </style>
 </head>
 <body>
-  <button id="toggle-theme">🌗 테마 전환</button>
-  <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</h1>
-  <div class="content">
+  <div class="header">
+    <h1>미니파이터 클래식 서버 컨텐츠 일정표</h1>
+    <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
+  </div>
 
-    <!-- 함선 체크 -->
-    <div id="ship-status">
-      <span>🛳️ 오늘 함선 완료 여부:</span>
-      <button id="ship-toggle">❌ 미완료</button>
+  <div class="grid">
+    <div class="column">
+      <div class="box">
+        <h3>
+          (상급)보스존
+          <span>
+            <button class="small" onclick="toggleAll('boss', true)">전체 체크</button>
+            <button class="small" onclick="toggleAll('boss', false)">해제</button>
+          </span>
+        </h3>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="boss-1130"> 오전 11:30</label>
+          <label><input type="checkbox" id="boss-1430"> 오후 2:30</label>
+          <label><input type="checkbox" id="boss-1730"> 오후 5:30</label>
+          <label><input type="checkbox" id="boss-2130"> 오후 9:30</label>
+          <label><input type="checkbox" id="boss-0230"> 오전 2:30</label>
+        </div>
+      </div>
+
+      <div class="box">
+        <h3>
+          천하제일대회
+          <span>
+            <button class="small" onclick="toggleAll('fight', true)">전체 체크</button>
+            <button class="small" onclick="toggleAll('fight', false)">해제</button>
+          </span>
+        </h3>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="fight-1000"> 오전 10:00</label>
+          <label><input type="checkbox" id="fight-1300"> 오후 1:00</label>
+          <label><input type="checkbox" id="fight-1600"> 오후 4:00</label>
+          <label><input type="checkbox" id="fight-2000"> 오후 8:00</label>
+          <label><input type="checkbox" id="fight-0100"> 오전 1:00</label>
+        </div>
+      </div>
     </div>
 
-    <!-- 보스존 -->
-    <div class="section">
-      <h2>(상급) 보스존</h2>
-      <label><span>오전 11:30</span><input type="checkbox" class="alert" data-time="11:30"></label>
-      <label><span>오후 2:30</span><input type="checkbox" class="alert" data-time="14:30"></label>
-      <label><span>오후 5:30</span><input type="checkbox" class="alert" data-time="17:30"></label>
-      <label><span>오후 9:30</span><input type="checkbox" class="alert" data-time="21:30"></label>
-      <label><span>오전 2:30</span><input type="checkbox" class="alert" data-time="02:30"></label>
-    </div>
+    <div class="column">
+      <div class="box">
+        <h3>
+          낚시대회
+          <span>
+            <button class="small" onclick="toggleAll('fish', true)">전체 체크</button>
+            <button class="small" onclick="toggleAll('fish', false)">해제</button>
+          </span>
+        </h3>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="fish-1200"> 오후 12:00</label>
+          <label><input type="checkbox" id="fish-1500"> 오후 3:00</label>
+          <label><input type="checkbox" id="fish-1800"> 오후 6:00</label>
+          <label><input type="checkbox" id="fish-2200"> 오후 10:00</label>
+        </div>
+      </div>
 
-    <!-- 천하제일대회 -->
-    <div class="section">
-      <h2>천하제일대회</h2>
-      <label><span>오전 10:00</span><input type="checkbox" class="alert" data-time="10:00"></label>
-      <label><span>오후 1:00</span><input type="checkbox" class="alert" data-time="13:00"></label>
-      <label><span>오후 4:00</span><input type="checkbox" class="alert" data-time="16:00"></label>
-      <label><span>오후 8:00</span><input type="checkbox" class="alert" data-time="20:00"></label>
-      <label><span>오전 1:00</span><input type="checkbox" class="alert" data-time="01:00"></label>
-    </div>
-
-    <!-- 낚시대회 -->
-    <div class="section">
-      <h2>낚시대회</h2>
-      <label><span>오후 12:00</span><input type="checkbox" class="alert" data-time="12:00"></label>
-      <label><span>오후 3:00</span><input type="checkbox" class="alert" data-time="15:00"></label>
-      <label><span>오후 6:00</span><input type="checkbox" class="alert" data-time="18:00"></label>
-      <label><span>오후 10:00</span><input type="checkbox" class="alert" data-time="22:00"></label>
-    </div>
-
-    <!-- 공성전 -->
-    <div class="section">
-      <h2>공성전</h2>
-      <label><span>오후 9:00</span><input type="checkbox" class="alert" data-time="21:00"></label>
+      <div class="box">
+        <h3>
+          공성전
+          <span>
+            <button class="small" onclick="toggleAll('castle', true)">전체 체크</button>
+            <button class="small" onclick="toggleAll('castle', false)">해제</button>
+          </span>
+        </h3>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="castle-2100"> 오후 9:00</label>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 알림 소리 -->
-  <audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
-
   <script>
-    const toggleThemeBtn = document.getElementById("toggle-theme");
-    const shipToggleBtn = document.getElementById("ship-toggle");
-    const alertSound = document.getElementById("alert-sound");
+    function toggleMode() {
+      const body = document.body;
+      const btn = document.querySelector('.mode-toggle');
+      body.classList.toggle('light');
+      btn.textContent = body.classList.contains('light') ? '☀️ 라이트 모드' : '🌙 다크 모드';
+    }
 
-    // 다크 모드 전환
-    toggleThemeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-    });
-
-    // 함선 체크 토글
-    shipToggleBtn.addEventListener("click", () => {
-      const current = shipToggleBtn.textContent.includes("✅");
-      shipToggleBtn.textContent = current ? "❌ 미완료" : "✅ 완료";
-    });
-
-    // 알람 확인 반복
-    setInterval(() => {
-      const now = new Date();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      const currentTime = `${hh}:${mm}`;
-
-      document.querySelectorAll('.alert').forEach(input => {
-        if (input.checked && input.dataset.time === currentTime) {
-          alertSound.play();
-          alert(`⏰ ${currentTime} - 컨텐츠 시간입니다!`);
-        }
+    function toggleAll(prefix, state) {
+      const checkboxes = document.querySelectorAll(`input[id^="${prefix}-"]`);
+      checkboxes.forEach(cb => {
+        cb.checked = state;
+        saveState(cb.id, state);
       });
-    }, 60 * 1000); // 1분마다 검사
+    }
+
+    function saveState(id, checked) {
+      localStorage.setItem(id, checked ? '1' : '0');
+    }
+
+    function loadState() {
+      const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+      allCheckboxes.forEach(cb => {
+        const stored = localStorage.getItem(cb.id);
+        if (stored !== null) cb.checked = stored === '1';
+        cb.addEventListener('change', () => saveState(cb.id, cb.checked));
+      });
+    }
+
+    window.onload = loadState;
   </script>
 </body>
 </html>

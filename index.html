@@ -1,320 +1,267 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
   <style>
     :root {
       --bg-color: #1e1e1e;
       --text-color: #f0f0f0;
-      --box-bg: #2c2c2c;
-      --border-color: #444;
+      --table-bg: #ffffff;
+      --table-text: #000000;
     }
+
     body.light {
-      --bg-color: #f4f6f8;
-      --text-color: #111;
-      --box-bg: #fff;
-      --border-color: #ccc;
+      --bg-color: #f9f9f9;
+      --text-color: #333333;
+      --table-bg: #ffffff;
+      --table-text: #000000;
     }
+
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
       padding: 20px;
+      margin: auto;
+      max-width: 960px;
       transition: background-color 0.3s, color 0.3s;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
+
     .mode-toggle {
-      background-color: transparent;
+      float: right;
+      margin-top: -10px;
+      padding: 5px 10px;
+      border-radius: 6px;
       border: 1px solid var(--text-color);
+      background-color: transparent;
       color: var(--text-color);
-      padding: 6px 12px;
-      border-radius: 5px;
       cursor: pointer;
-      font-size: 14px;
     }
-    .compact {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+
     #ship-status {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      gap: 10px;
+      margin: 10px 0 30px;
       font-size: 16px;
-      font-weight: bold;
     }
+
     #ship-toggle {
-      padding: 6px 10px;
+      margin-left: 10px;
+      padding: 5px 12px;
+      border-radius: 6px;
       font-size: 14px;
-      border-radius: 5px;
+      background-color: #007BFF;
+      color: white;
       border: none;
       cursor: pointer;
     }
-    .grid {
+
+    .container {
       display: flex;
+      gap: 40px;
       flex-wrap: wrap;
-      gap: 20px;
     }
-    .column {
-      flex: 1;
+
+    .table-group {
+      width: 45%;
       min-width: 300px;
     }
-    .box {
-      background-color: var(--box-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 14px;
-    }
-    .box h3 {
-      margin-top: 0;
-      font-size: 16px;
+
+    .group-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 18px;
+      margin: 20px 0 10px;
     }
-    .checkbox-group label {
-      display: flex;
-      align-items: center;
-      margin: 4px 0;
+
+    .group-title span {
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
       font-size: 14px;
-      justify-content: space-between;
+      border-collapse: collapse;
+      background-color: var(--table-bg);
+      color: var(--table-text);
     }
-    .checkbox-group input[type="checkbox"] {
-      margin-right: 6px;
-      transform: scale(1.1);
+
+    td {
+      padding: 6px 8px;
     }
-    button.small {
-      font-size: 12px;
-      padding: 4px 8px;
+
+    td:first-child {
+      width: 100%;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
       margin-left: 6px;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
     }
-    body.light button.small {
-      background-color: #ddd;
-      color: #000;
-    }
-    .test-alarm {
-      margin-top: 30px;
-      text-align: center;
-    }
-    .test-alarm button {
+
+    .test-button {
+      margin-top: 40px;
       padding: 8px 16px;
       font-size: 14px;
-      cursor: pointer;
-      border-radius: 5px;
-      background-color: #555;
-      color: white;
       border: none;
+      background-color: #28a745;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    body.light .test-alarm button {
-      background-color: #ccc;
-      color: #000;
+
+    .popup {
+      background-color: #444;
+      color: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      box-shadow: 0 0 8px #00000066;
     }
+
   </style>
 </head>
 <body>
-  <div class="compact">
-    <div class="header">
-      <h1>미니파이터 클래식 서버 컨텐츠 일정표</h1>
-      <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
-    </div>
+  <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑
+    <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
+  </h1>
 
-    <div id="ship-status">
-      <span>🛳️ 오늘 함선 완료 여부:</span>
-      <button id="ship-toggle">❌ 미완료</button>
-    </div>
+  <div id="ship-status">
+    <span>🛳️ 오늘 함선 완료 여부:</span>
+    <button id="ship-toggle">❌ 미완료</button>
+  </div>
 
-    <div class="grid">
-      <div class="column">
-        <div class="box">
-          <h3>
-            (상급)보스존
-            <span>
-              <button class="small" onclick="toggleAll('boss', true)">전체 체크</button>
-              <button class="small" onclick="toggleAll('boss', false)">해제</button>
-            </span>
-          </h3>
-          <div class="checkbox-group">
-            <label><span><input type="checkbox" id="boss-1130"> 오전 11:30</span><input type="checkbox" id="notify-boss-1130"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="boss-1430"> 오후 2:30</span><input type="checkbox" id="notify-boss-1430"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="boss-1730"> 오후 5:30</span><input type="checkbox" id="notify-boss-1730"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="boss-2130"> 오후 9:30</span><input type="checkbox" id="notify-boss-2130"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="boss-0230"> 오전 2:30</span><input type="checkbox" id="notify-boss-0230"> 5분 전 알림</label>
-          </div>
-        </div>
-
-        <div class="box">
-          <h3>
-            천하제일대회
-            <span>
-              <button class="small" onclick="toggleAll('fight', true)">전체 체크</button>
-              <button class="small" onclick="toggleAll('fight', false)">해제</button>
-            </span>
-          </h3>
-          <div class="checkbox-group">
-            <label><span><input type="checkbox" id="fight-1000"> 오전 10:00</span><input type="checkbox" id="notify-fight-1000"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="fight-1300"> 오후 1:00</span><input type="checkbox" id="notify-fight-1300"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="fight-1600"> 오후 4:00</span><input type="checkbox" id="notify-fight-1600"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="fight-2000"> 오후 8:00</span><input type="checkbox" id="notify-fight-2000"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="fight-0100"> 오전 1:00</span><input type="checkbox" id="notify-fight-0100"> 5분 전 알림</label>
-          </div>
-        </div>
+  <div class="container">
+    <!-- 왼쪽 열 -->
+    <div class="table-group">
+      <div class="group-title">
+        <span>(상급)보스존</span>
+        <span>
+          <label><input type="checkbox" data-group="boss" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('boss')">전체 토글</button>
+        </span>
       </div>
+      <table>
+        <tbody id="boss">
+          <tr><td>11:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>14:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>17:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>21:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>02:30</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
 
-      <div class="column">
-        <div class="box">
-          <h3>
-            낚시대회
-            <span>
-              <button class="small" onclick="toggleAll('fish', true)">전체 체크</button>
-              <button class="small" onclick="toggleAll('fish', false)">해제</button>
-            </span>
-          </h3>
-          <div class="checkbox-group">
-            <label><span><input type="checkbox" id="fish-1200"> 오후 12:00</span><input type="checkbox" id="notify-fish-1200"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="fish-1500"> 오후 3:00</span><input type="checkbox" id="notify-fish-1500"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="fish-1800"> 오후 6:00</span><input type="checkbox" id="notify-fish-1800"> 5분 전 알림</label>
-            <label><span><input type="checkbox" id="fish-2200"> 오후 10:00</span><input type="checkbox" id="notify-fish-2200"> 5분 전 알림</label>
-          </div>
-        </div>
-
-        <div class="box">
-          <h3>
-            공성전
-            <span>
-              <button class="small" onclick="toggleAll('castle', true)">전체 체크</button>
-              <button class="small" onclick="toggleAll('castle', false)">해제</button>
-            </span>
-          </h3>
-          <div class="checkbox-group">
-            <label><span><input type="checkbox" id="castle-2100"> 오후 9:00</span><input type="checkbox" id="notify-castle-2100"> 5분 전 알림</label>
-          </div>
-        </div>
+      <div class="group-title">
+        <span>천하제일대회</span>
+        <span>
+          <label><input type="checkbox" data-group="match" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('match')">전체 토글</button>
+        </span>
       </div>
+      <table>
+        <tbody id="match">
+          <tr><td>10:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>13:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>16:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>20:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>01:00</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="test-alarm">
-      <button onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
+    <!-- 오른쪽 열 -->
+    <div class="table-group">
+      <div class="group-title">
+        <span>낚시대회</span>
+        <span>
+          <label><input type="checkbox" data-group="fish" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('fish')">전체 토글</button>
+        </span>
+      </div>
+      <table>
+        <tbody id="fish">
+          <tr><td>12:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>15:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>18:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>22:00</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
+
+      <div class="group-title">
+        <span>공성전</span>
+        <span>
+          <label><input type="checkbox" data-group="castle" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('castle')">전체 토글</button>
+        </span>
+      </div>
+      <table>
+        <tbody id="castle">
+          <tr><td>21:00</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
+  <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
+
+  <audio id="notify-sound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+
   <script>
+    // 테마 전환
     function toggleMode() {
       const body = document.body;
       const btn = document.querySelector('.mode-toggle');
-      body.classList.toggle('light');
-      btn.textContent = body.classList.contains('light') ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      body.classList.toggle("light");
+      btn.textContent = body.classList.contains("light") ? "☀️ 라이트 모드" : "🌙 다크 모드";
     }
 
-    function toggleAll(prefix, state) {
-      const checkboxes = document.querySelectorAll(`input[id^="${prefix}-"]`);
-      checkboxes.forEach(cb => {
-        if (!cb.id.includes("notify")) {
-          cb.checked = state;
-          localStorage.setItem(cb.id, state ? '1' : '0');
-        }
-      });
-    }
-
-    function loadState() {
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-        const stored = localStorage.getItem(cb.id);
-        if (stored !== null) cb.checked = stored === '1';
-        cb.addEventListener('change', () => {
-          localStorage.setItem(cb.id, cb.checked ? '1' : '0');
-        });
-      });
-
-      const shipBtn = document.getElementById('ship-toggle');
-      const shipDone = localStorage.getItem('ship-done') === '1';
-      updateShipBtn(shipDone);
-    }
-
-    function updateShipBtn(done) {
-      const btn = document.getElementById('ship-toggle');
-      btn.textContent = done ? '✅ 완료' : '❌ 미완료';
-      localStorage.setItem('ship-done', done ? '1' : '0');
-    }
-
-    document.getElementById('ship-toggle').addEventListener('click', () => {
-      const current = localStorage.getItem('ship-done') === '1';
-      updateShipBtn(!current);
+    // 함선 버튼
+    document.getElementById("ship-toggle").addEventListener("click", function() {
+      const btn = this;
+      if (btn.textContent.includes("미완료")) {
+        btn.textContent = "✅ 완료";
+        btn.style.backgroundColor = "#28a745";
+      } else {
+        btn.textContent = "❌ 미완료";
+        btn.style.backgroundColor = "#007BFF";
+      }
     });
 
-    function requestNotificationPermission() {
-      if (Notification.permission !== "granted") {
+    // 그룹 전체 토글
+    function toggleGroup(groupId) {
+      const checkboxes = document.querySelectorAll(`#${groupId} input[type="checkbox"]`);
+      const allChecked = [...checkboxes].every(c => c.checked);
+      checkboxes.forEach(c => c.checked = !allChecked);
+    }
+
+    // 알림 권한 요청
+    if (Notification.permission !== "granted") {
+      setTimeout(() => {
+        alert("🔔 알림을 받기 위해 브라우저에서 알림 허용을 설정해주세요!");
         Notification.requestPermission();
-      }
+      }, 500);
     }
 
-    function scheduleNotifications() {
-      const timeMap = {
-        '1130': '11:30',
-        '1430': '14:30',
-        '1730': '17:30',
-        '2130': '21:30',
-        '0230': '02:30',
-        '1000': '10:00',
-        '1300': '13:00',
-        '1600': '16:00',
-        '2000': '20:00',
-        '0100': '01:00',
-        '1200': '12:00',
-        '1500': '15:00',
-        '1800': '18:00',
-        '2200': '22:00',
-        '2100': '21:00'
-      };
-
-      setInterval(() => {
-        const now = new Date();
-        for (const id in timeMap) {
-          const types = ['boss', 'fight', 'fish', 'castle'];
-          for (const type of types) {
-            const checkbox = document.getElementById(`notify-${type}-${id}`);
-            if (checkbox && checkbox.checked) {
-              const [h, m] = timeMap[id].split(':');
-              const target = new Date();
-              target.setHours(parseInt(h));
-              target.setMinutes(parseInt(m) - 5);
-              target.setSeconds(0);
-
-              const diff = target - now;
-              if (diff >= 0 && diff < 1000) {
-                new Notification(`${type.toUpperCase()} - ${timeMap[id]} 시작 5분 전!`);
-              }
-            }
-          }
-        }
-      }, 1000);
-    }
-
+    // 알림 테스트
     function testNotification() {
       setTimeout(() => {
-        new Notification("✅ 테스트 알림입니다!");
+        notify("⏰ 테스트 알림입니다!");
       }, 5000);
     }
 
-    window.onload = () => {
-      requestNotificationPermission();
-      loadState();
-      scheduleNotifications();
-    };
+    // 알림 출력 + 소리
+    function notify(message) {
+      if (Notification.permission === "granted") {
+        new Notification(message);
+        document.getElementById("notify-sound").play();
+      }
+    }
+
+    // 실제 알림을 구현하려면 시간 비교 & 반복 체크 로직 추가 필요
+    // setInterval로 매분 현재 시간과 알림 시간을 비교 → notify()
   </script>
 </body>
 </html>

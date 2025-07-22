@@ -1,95 +1,133 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>미니파이터 클래식 서버 컨텐츠 일정표</title>
+  <meta charset="UTF-8">
+  <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
   <style>
+    :root {
+      --bg-color: #1e1e1e;
+      --text-color: #f0f0f0;
+      --table-bg: #ffffff;
+      --table-text: #000000;
+    }
+
+    body.light {
+      --bg-color: #f9f9f9;
+      --text-color: #333333;
+      --table-bg: #ffffff;
+      --table-text: #000000;
+    }
+
     body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
       font-family: 'Segoe UI', sans-serif;
-      background-color: #1e1e1e;
-      color: #f0f0f0;
-      margin: 20px;
+      padding: 20px;
+      margin: auto;
+      max-width: 960px;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
+    }
+
+    .mode-toggle {
+      float: right;
+      margin-top: -35px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--text-color);
+      background-color: transparent;
+      color: var(--text-color);
+      cursor: pointer;
     }
 
     #ship-status {
+      margin: 10px 0 30px;
+      font-size: 16px;
       text-align: center;
-      margin-bottom: 20px;
     }
 
     #ship-toggle {
       margin-left: 10px;
-      padding: 6px 14px;
+      padding: 5px 12px;
+      border-radius: 6px;
       font-size: 14px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
       cursor: pointer;
     }
 
     .container {
       display: flex;
+      gap: 40px;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 40px;
+    }
+
+    .table-group {
+      width: 45%;
+      min-width: 300px;
+    }
+
+    .group-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      margin: 20px 0 10px;
+    }
+
+    .group-title span {
+      font-weight: bold;
     }
 
     table {
+      width: 100%;
+      font-size: 14px;
       border-collapse: collapse;
-      width: 300px;
-      background-color: #fff;
-      color: #000;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-
-    th {
-      background-color: #f2f2f2;
-      font-size: 16px;
-      padding: 10px;
-      position: relative;
+      background-color: var(--table-bg);
+      color: var(--table-text);
+      border: 1px solid #ccc;
     }
 
     td {
-      text-align: center;
-      padding: 8px;
+      padding: 6px 8px;
+      border-bottom: 1px solid #ddd;
     }
 
-    .time-text {
-      font-size: 12px;
-      margin-bottom: 6px;
-      display: block;
+    td:first-child {
+      width: 100%;
     }
 
-    .check-all {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 12px;
-      cursor: pointer;
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      margin-left: 6px;
     }
 
-    .footer {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 30px;
-    }
-
-    #test-alert {
-      background-color: #007bff;
-      color: white;
-      padding: 10px 16px;
+    .test-button {
+      margin-top: 40px;
+      padding: 8px 16px;
+      font-size: 14px;
       border: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 6px;
       cursor: pointer;
-      border-radius: 4px;
+      float: right;
+    }
+
+    .volume-control {
+      margin-top: 10px;
+      float: right;
     }
   </style>
 </head>
 <body>
   <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</h1>
+  <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
 
   <div id="ship-status">
     <span>🛳️ 오늘 함선 완료 여부:</span>
@@ -97,120 +135,133 @@
   </div>
 
   <div class="container">
-    <table id="boss-table">
-      <thead>
-        <tr>
-          <th>
-            (상급)보스존 <span class="check-all" onclick="toggleAll('boss')">전체 체크</span><br>
-            <span class="time-text">오전 11:30 / 오후 2:30 / 오후 5:30 / 오후 9:30 / 오전 2:30</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><input type="checkbox" class="alarm boss" /> 오전 11:30</td></tr>
-        <tr><td><input type="checkbox" class="alarm boss" /> 오후 2:30</td></tr>
-        <tr><td><input type="checkbox" class="alarm boss" /> 오후 5:30</td></tr>
-        <tr><td><input type="checkbox" class="alarm boss" /> 오후 9:30</td></tr>
-        <tr><td><input type="checkbox" class="alarm boss" /> 오전 2:30</td></tr>
-      </tbody>
-    </table>
+    <!-- 왼쪽 열 -->
+    <div class="table-group">
+      <div class="group-title">
+        <span>(상급)보스존</span>
+        <span>
+          <label><input type="checkbox" data-group="boss" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('boss')">전체 토글</button>
+        </span>
+      </div>
+      <table>
+        <tbody id="boss">
+          <tr><td>11:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>14:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>17:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>21:30</td><td><input type="checkbox"></td></tr>
+          <tr><td>02:30</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
 
-    <table id="tournament-table">
-      <thead>
-        <tr>
-          <th>
-            천하제일대회 <span class="check-all" onclick="toggleAll('tournament')">전체 체크</span><br>
-            <span class="time-text">오전 10:00 / 오후 1:00 / 오후 4:00 / 오후 8:00 / 오전 1:00</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><input type="checkbox" class="alarm tournament" /> 오전 10:00</td></tr>
-        <tr><td><input type="checkbox" class="alarm tournament" /> 오후 1:00</td></tr>
-        <tr><td><input type="checkbox" class="alarm tournament" /> 오후 4:00</td></tr>
-        <tr><td><input type="checkbox" class="alarm tournament" /> 오후 8:00</td></tr>
-        <tr><td><input type="checkbox" class="alarm tournament" /> 오전 1:00</td></tr>
-      </tbody>
-    </table>
+      <div class="group-title">
+        <span>천하제일대회</span>
+        <span>
+          <label><input type="checkbox" data-group="match" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('match')">전체 토글</button>
+        </span>
+      </div>
+      <table>
+        <tbody id="match">
+          <tr><td>10:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>13:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>16:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>20:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>01:00</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    <table id="fishing-table">
-      <thead>
-        <tr>
-          <th>
-            낚시대회 <span class="check-all" onclick="toggleAll('fishing')">전체 체크</span><br>
-            <span class="time-text">오후 12:00 / 오후 3:00 / 오후 6:00 / 오후 10:00</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><input type="checkbox" class="alarm fishing" /> 오후 12:00</td></tr>
-        <tr><td><input type="checkbox" class="alarm fishing" /> 오후 3:00</td></tr>
-        <tr><td><input type="checkbox" class="alarm fishing" /> 오후 6:00</td></tr>
-        <tr><td><input type="checkbox" class="alarm fishing" /> 오후 10:00</td></tr>
-      </tbody>
-    </table>
+    <!-- 오른쪽 열 -->
+    <div class="table-group">
+      <div class="group-title">
+        <span>낚시대회</span>
+        <span>
+          <label><input type="checkbox" data-group="fish" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('fish')">전체 토글</button>
+        </span>
+      </div>
+      <table>
+        <tbody id="fish">
+          <tr><td>12:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>15:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>18:00</td><td><input type="checkbox"></td></tr>
+          <tr><td>22:00</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
 
-    <table id="war-table">
-      <thead>
-        <tr>
-          <th>
-            공성전 <span class="check-all" onclick="toggleAll('war')">전체 체크</span><br>
-            <span class="time-text">오후 9:00</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><input type="checkbox" class="alarm war" /> 오후 9:00</td></tr>
-      </tbody>
-    </table>
+      <div class="group-title">
+        <span>공성전</span>
+        <span>
+          <label><input type="checkbox" data-group="castle" class="alarm5"> 5분 전 알림</label>
+          <button onclick="toggleGroup('castle')">전체 토글</button>
+        </span>
+      </div>
+      <table>
+        <tbody id="castle">
+          <tr><td>21:00</td><td><input type="checkbox"></td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="footer">
-    <button id="test-alert">알림 테스트 버튼 (5초 후 알림)</button>
+  <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
+  <div class="volume-control">
+    <audio id="notify-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" controls preload="auto"></audio>
   </div>
-
-  <audio id="alarm-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
 
   <script>
-    const shipBtn = document.getElementById("ship-toggle");
-    shipBtn.addEventListener("click", () => {
-      if (shipBtn.textContent.includes("❌")) {
-        shipBtn.textContent = "✅ 완료";
+    // 테마 전환
+    function toggleMode() {
+      const body = document.body;
+      const btn = document.querySelector('.mode-toggle');
+      body.classList.toggle("light");
+      btn.textContent = body.classList.contains("light") ? "☀️ 라이트 모드" : "🌙 다크 모드";
+    }
+
+    // 함선 버튼
+    document.getElementById("ship-toggle").addEventListener("click", function () {
+      const btn = this;
+      if (btn.textContent.includes("미완료")) {
+        btn.textContent = "✅ 완료";
+        btn.style.backgroundColor = "#28a745";
       } else {
-        shipBtn.textContent = "❌ 미완료";
+        btn.textContent = "❌ 미완료";
+        btn.style.backgroundColor = "#007BFF";
       }
     });
 
-    function toggleAll(category) {
-      const checkboxes = document.querySelectorAll(`input.${category}`);
-      const allChecked = [...checkboxes].every(chk => chk.checked);
-      checkboxes.forEach(chk => chk.checked = !allChecked);
+    // 전체 체크 토글
+    function toggleGroup(groupId) {
+      const checkboxes = document.querySelectorAll(`#${groupId} input[type="checkbox"]`);
+      const allChecked = [...checkboxes].every(c => c.checked);
+      checkboxes.forEach(c => c.checked = !allChecked);
     }
 
-    // 알림 테스트 버튼
-    const testBtn = document.getElementById("test-alert");
-    testBtn.addEventListener("click", () => {
+    // 알림 권한 요청
+    if (Notification.permission !== "granted") {
       setTimeout(() => {
-        notify("테스트 알림입니다! ⏰");
-      }, 5000);
-    });
+        alert("🔔 알림을 받기 위해 브라우저에서 알림 허용을 설정해주세요!");
+        Notification.requestPermission();
+      }, 500);
+    }
 
+    // 알림 테스트
+    function testNotification() {
+      setTimeout(() => {
+        notify("⏰ 테스트 알림입니다!");
+      }, 5000);
+    }
+
+    // 알림 + 소리
     function notify(message) {
       if (Notification.permission === "granted") {
         new Notification(message);
-        document.getElementById("alarm-sound").play();
-      } else {
-        alert(message);
+        const sound = document.getElementById("notify-sound");
+        sound.currentTime = 0;
+        sound.play();
       }
     }
-
-    // 알림 허용 권한 확인
-    window.onload = () => {
-      if (Notification.permission !== "granted") {
-        alert("🔔 브라우저 알림을 허용해주세요! 알림 기능이 꺼져 있습니다.");
-        Notification.requestPermission();
-      }
-    };
   </script>
 </body>
 </html>

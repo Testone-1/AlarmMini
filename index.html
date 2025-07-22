@@ -1,86 +1,65 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>미니파이터 클래식 서버 일정표_By 꽃게랑</title>
+  <meta charset="UTF-8">
+  <title>미니파이터 컨텐츠 알림</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #ffffff;
       color: #333;
-      margin: 0;
-      padding: 20px;
     }
-
     h1 {
       text-align: center;
-      font-size: 1.6rem;
-      margin-bottom: 30px;
     }
-
     #ship-status {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-
     #ship-toggle {
-      padding: 5px 10px;
       font-size: 0.9rem;
+      padding: 5px 10px;
+      margin-left: 8px;
     }
-
     .table-wrapper {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 30px;
+      gap: 40px;
     }
-
-    .content-table {
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 280px;
+    table {
+      border-collapse: collapse;
+      width: 260px;
       font-size: 0.9rem;
     }
-
-    .content-table th {
-      background-color: #f9f9f9;
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
+    th, td {
+      border: 1px solid #ddd;
+      padding: 6px;
       text-align: center;
     }
-
-    .content-table td {
-      padding: 8px;
-      text-align: center;
-      border-top: 1px solid #eee;
+    th {
+      background-color: #f5f5f5;
     }
-
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: normal;
     }
-
     .section-header label {
       font-weight: normal;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
-
     .section-header button {
-      margin-left: 5px;
-      font-size: 0.75rem;
-      padding: 2px 6px;
+      font-size: 0.7rem;
+      margin-left: 4px;
     }
-
     #alert-test {
-      display: block;
-      margin: 30px auto 0 auto;
-      padding: 8px 16px;
+      margin-top: 30px;
+      float: right;
+      padding: 8px 14px;
       font-size: 0.9rem;
     }
-
     .popup {
       display: none;
       position: fixed;
@@ -93,7 +72,6 @@
       z-index: 999;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
-
     .popup button {
       margin-top: 10px;
     }
@@ -104,13 +82,13 @@
   <h1>미니파이터 클래식 서버 컨텐츠 일정표</h1>
 
   <div id="ship-status">
-    <span>🛳️ 오늘 함선 완료 여부:</span>
+    🛳️ 오늘 함선 완료 여부:
     <button id="ship-toggle">❌ 미완료</button>
   </div>
 
   <div class="table-wrapper">
     <!-- 보스존 -->
-    <table class="content-table">
+    <table>
       <thead>
         <tr>
           <th colspan="2" class="section-header">
@@ -132,7 +110,7 @@
     </table>
 
     <!-- 천하제일 -->
-    <table class="content-table">
+    <table>
       <thead>
         <tr>
           <th colspan="2" class="section-header">
@@ -154,7 +132,7 @@
     </table>
 
     <!-- 낚시 -->
-    <table class="content-table">
+    <table>
       <thead>
         <tr>
           <th colspan="2" class="section-header">
@@ -175,7 +153,7 @@
     </table>
 
     <!-- 공성전 -->
-    <table class="content-table">
+    <table>
       <thead>
         <tr>
           <th colspan="2" class="section-header">
@@ -196,7 +174,7 @@
   <button id="alert-test">🔔 알림 테스트 버튼 (5초 후 알림)</button>
 
   <!-- 알림 사운드 -->
-  <audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/medium_bell_ringing_near.ogg" preload="auto"></audio>
+  <audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
 
   <!-- 알림 허용 팝업 -->
   <div id="notify-popup" class="popup">
@@ -250,6 +228,5 @@
       }
     };
   </script>
-
 </body>
 </html>

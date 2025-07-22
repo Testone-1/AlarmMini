@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
   <style>
     :root {
@@ -28,28 +28,28 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    .header {
-      position: relative;
+    h1 {
       text-align: center;
-      margin-bottom: 10px;
+      position: relative;
+      margin-bottom: 60px;
     }
 
-    .mode-area {
+    .mode-box {
       position: absolute;
       right: 0;
-      bottom: 0;
+      bottom: -35px;
       text-align: right;
       font-size: 12px;
     }
 
     .mode-toggle {
-      margin-bottom: 2px;
       padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid var(--text-color);
       background-color: transparent;
       color: var(--text-color);
       cursor: pointer;
+      font-size: 13px;
     }
 
     #ship-status {
@@ -73,7 +73,6 @@
       display: flex;
       gap: 40px;
       flex-wrap: wrap;
-      justify-content: center;
     }
 
     .table-group {
@@ -89,12 +88,8 @@
       margin: 20px 0 10px;
     }
 
-    .group-title span {
-      font-weight: bold;
-    }
-
     .group-title label {
-      font-size: 12px;
+      font-size: 13px;
     }
 
     table {
@@ -103,7 +98,7 @@
       border-collapse: collapse;
       background-color: var(--table-bg);
       color: var(--table-text);
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
     }
 
@@ -120,34 +115,32 @@
       margin-left: 6px;
     }
 
-    .bottom-right {
+    .bottom-right-controls {
       position: fixed;
-      right: 20px;
       bottom: 20px;
-      text-align: right;
-      z-index: 1000;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #444;
+      padding: 10px 14px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #00000066;
     }
 
     .test-button {
       padding: 8px 16px;
       font-size: 14px;
       border: none;
-      background-color: #007BFF;
+      background-color: #28a745;
       color: white;
       border-radius: 6px;
       cursor: pointer;
-      margin-bottom: 6px;
     }
 
-    .volume-control {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-    }
-
-    input[type="range"] {
+    #volume {
       width: 120px;
+      vertical-align: middle;
     }
 
     .popup {
@@ -164,14 +157,14 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</h1>
-    <div class="mode-area">
-      <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button><br />
-      브라우저에서 알림 허용을 설정해야 알림이 표시됩니다.<br />
+  <h1>
+    미니파이터 클래식 서버 컨텐츠 일정표
+    <div class="mode-box">
+      <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button><br>
+      브라우저에서 알림 허용을 설정해야 알림이 표시됩니다.<br>
       브라우저를 끈 상태에서는 작동하지 않습니다.
     </div>
-  </div>
+  </h1>
 
   <div id="ship-status">
     <span>🛳️ 오늘 함선 완료 여부:</span>
@@ -185,7 +178,7 @@
         <span>(상급)보스존</span>
         <span>
           <label><input type="checkbox" data-group="boss" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('boss')">전체 토글</button>
+          <button onclick="toggleGroup('boss')">전체 체크</button>
         </span>
       </div>
       <table>
@@ -202,7 +195,7 @@
         <span>천하제일대회</span>
         <span>
           <label><input type="checkbox" data-group="match" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('match')">전체 토글</button>
+          <button onclick="toggleGroup('match')">전체 체크</button>
         </span>
       </div>
       <table>
@@ -222,7 +215,7 @@
         <span>낚시대회</span>
         <span>
           <label><input type="checkbox" data-group="fish" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('fish')">전체 토글</button>
+          <button onclick="toggleGroup('fish')">전체 체크</button>
         </span>
       </div>
       <table>
@@ -238,7 +231,7 @@
         <span>공성전</span>
         <span>
           <label><input type="checkbox" data-group="castle" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('castle')">전체 토글</button>
+          <button onclick="toggleGroup('castle')">전체 체크</button>
         </span>
       </div>
       <table>
@@ -249,11 +242,10 @@
     </div>
   </div>
 
-  <div class="bottom-right">
-    <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button><br />
-    <div class="volume-control">
-      🎧 <input type="range" min="0" max="1" step="0.01" id="volume" value="1">
-    </div>
+  <!-- 고정 우측 하단: 알림 테스트 버튼 & 볼륨 -->
+  <div class="bottom-right-controls">
+    <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
+    <span>🔉</span><input type="range" id="volume" min="0" max="1" step="0.01" value="1">
   </div>
 
   <audio id="notify-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
@@ -300,33 +292,42 @@
       if (Notification.permission === "granted") {
         new Notification(message);
         const sound = document.getElementById("notify-sound");
-        sound.volume = parseFloat(document.getElementById("volume").value);
+        sound.volume = document.getElementById("volume").value;
         sound.play();
       }
     }
 
-    function checkAlarms() {
+    // 5분 전 알림 작동
+    setInterval(() => {
       const now = new Date();
-      const current = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      document.querySelectorAll('.alarm5').forEach(input => {
-        if (!input.checked) return;
-        const group = input.dataset.group;
-        document.querySelectorAll(`#${group} tr`).forEach(row => {
-          const time = row.querySelector('td').innerText;
-          const [hh, mm] = time.split(':').map(Number);
-          const alarmTime = new Date(now);
-          alarmTime.setHours(hh, mm - 5, 0, 0);
-          const alarmStr = `${String(alarmTime.getHours()).padStart(2, '0')}:${String(alarmTime.getMinutes()).padStart(2, '0')}`;
-          if (alarmStr === current && !row.dataset.notified) {
-            notify(`⏰ ${group.toUpperCase()} 컨텐츠 알림 시간입니다! (${time})`);
-            row.dataset.notified = "true";
-          }
-        });
+      const h = now.getHours().toString().padStart(2, "0");
+      const m = now.getMinutes().toString().padStart(2, "0");
+      const currentHM = `${h}:${m}`;
+      const allGroups = document.querySelectorAll(".alarm5");
+      allGroups.forEach(group => {
+        if (group.checked) {
+          const groupId = group.dataset.group;
+          const rows = document.querySelectorAll(`#${groupId} tr`);
+          rows.forEach(row => {
+            const time = row.cells[0].textContent.trim();
+            const [th, tm] = time.split(":").map(Number);
+            const alarm = new Date(now);
+            alarm.setHours(th);
+            alarm.setMinutes(tm - 5);
+            alarm.setSeconds(0);
+            const alarmHM = alarm.getHours().toString().padStart(2, "0") + ":" + alarm.getMinutes().toString().padStart(2, "0");
+            if (currentHM === alarmHM) {
+              notify(`⏰ ${groupId} 컨텐츠가 5분 후 시작됩니다!`);
+            }
+          });
+        }
       });
-    }
+    }, 60 * 1000); // 매분 실행
 
-    setInterval(checkAlarms, 60 * 1000); // 1분마다 체크
+    // 볼륨 조절
+    document.getElementById("volume").addEventListener("input", function () {
+      document.getElementById("notify-sound").volume = this.value;
+    });
   </script>
 </body>
 </html>

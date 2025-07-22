@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
   <style>
     :root {
@@ -28,22 +28,23 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    h1 {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+    .header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 10px;
     }
 
-    .mode-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
+    .mode-area {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      text-align: right;
       font-size: 12px;
     }
 
     .mode-toggle {
-      margin-left: 10px;
-      padding: 4px 10px;
+      margin-bottom: 2px;
+      padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid var(--text-color);
       background-color: transparent;
@@ -52,8 +53,9 @@
     }
 
     #ship-status {
-      margin: 10px 0 30px;
+      margin: 20px 0 30px;
       font-size: 16px;
+      text-align: center;
     }
 
     #ship-toggle {
@@ -71,6 +73,7 @@
       display: flex;
       gap: 40px;
       flex-wrap: wrap;
+      justify-content: center;
     }
 
     .table-group {
@@ -100,15 +103,15 @@
       border-collapse: collapse;
       background-color: var(--table-bg);
       color: var(--table-text);
-      border-radius: 8px;
+      border-radius: 10px;
       overflow: hidden;
     }
 
-    table td {
+    td {
       padding: 6px 8px;
     }
 
-    table td:first-child {
+    td:first-child {
       width: 100%;
     }
 
@@ -117,13 +120,12 @@
       margin-left: 6px;
     }
 
-    .test-area {
+    .bottom-right {
       position: fixed;
-      right: 30px;
-      bottom: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
+      right: 20px;
+      bottom: 20px;
+      text-align: right;
+      z-index: 1000;
     }
 
     .test-button {
@@ -134,10 +136,17 @@
       color: white;
       border-radius: 6px;
       cursor: pointer;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    input[type="range"] {
       width: 120px;
     }
 
@@ -155,14 +164,14 @@
   </style>
 </head>
 <body>
-  <h1>
-    미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑
-    <div class="mode-wrapper">
-      <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button>
-      <span>브라우저에서 알림 허용을 설정해야 알림이 표시됩니다.</span>
-      <span>브라우저를 끈 상태에서는 작동하지 않습니다.</span>
+  <div class="header">
+    <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</h1>
+    <div class="mode-area">
+      <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button><br />
+      브라우저에서 알림 허용을 설정해야 알림이 표시됩니다.<br />
+      브라우저를 끈 상태에서는 작동하지 않습니다.
     </div>
-  </h1>
+  </div>
 
   <div id="ship-status">
     <span>🛳️ 오늘 함선 완료 여부:</span>
@@ -240,17 +249,16 @@
     </div>
   </div>
 
-  <div class="test-area">
-    <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
-    <input class="volume-control" type="range" id="volume" min="0" max="1" step="0.01" value="1">
+  <div class="bottom-right">
+    <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button><br />
+    <div class="volume-control">
+      🎧 <input type="range" min="0" max="1" step="0.01" id="volume" value="1">
+    </div>
   </div>
 
   <audio id="notify-sound" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
 
   <script>
-    const notifySound = document.getElementById("notify-sound");
-
-    // 모드 전환
     function toggleMode() {
       const body = document.body;
       const btn = document.querySelector('.mode-toggle');
@@ -258,8 +266,7 @@
       btn.textContent = body.classList.contains("light") ? "☀️ 라이트 모드" : "🌙 다크 모드";
     }
 
-    // 함선 버튼
-    document.getElementById("ship-toggle").addEventListener("click", function () {
+    document.getElementById("ship-toggle").addEventListener("click", function() {
       const btn = this;
       if (btn.textContent.includes("미완료")) {
         btn.textContent = "✅ 완료";
@@ -270,73 +277,56 @@
       }
     });
 
-    // 그룹 전체 체크
     function toggleGroup(groupId) {
       const checkboxes = document.querySelectorAll(`#${groupId} input[type="checkbox"]`);
       const allChecked = [...checkboxes].every(c => c.checked);
       checkboxes.forEach(c => c.checked = !allChecked);
     }
 
-    // 알림 권한 요청
     if (Notification.permission !== "granted") {
       setTimeout(() => {
         alert("🔔 알림을 받기 위해 브라우저에서 알림 허용을 설정해주세요!");
         Notification.requestPermission();
-      }, 1000);
+      }, 500);
     }
 
-    // 알림
-    function notify(message) {
-      if (Notification.permission === "granted") {
-        new Notification(message);
-        notifySound.play();
-      }
-    }
-
-    // 테스트 버튼
     function testNotification() {
       setTimeout(() => {
         notify("⏰ 테스트 알림입니다!");
       }, 5000);
     }
 
-    // 볼륨
-    document.getElementById("volume").addEventListener("input", function () {
-      notifySound.volume = this.value;
-    });
+    function notify(message) {
+      if (Notification.permission === "granted") {
+        new Notification(message);
+        const sound = document.getElementById("notify-sound");
+        sound.volume = parseFloat(document.getElementById("volume").value);
+        sound.play();
+      }
+    }
 
-    // 5분 전 알림 기능
-    setInterval(() => {
+    function checkAlarms() {
       const now = new Date();
-      const current = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-      const groups = ["boss", "match", "fish", "castle"];
+      const current = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-      groups.forEach(group => {
-        const enabled = document.querySelector(`.alarm5[data-group="${group}"]`)?.checked;
-        if (!enabled) return;
-
-        const rows = document.querySelectorAll(`#${group} tr`);
-        rows.forEach(row => {
-          const timeText = row.cells[0].textContent;
-          const check = row.querySelector("input[type='checkbox']");
-          const [h, m] = timeText.split(':').map(Number);
-          let scheduled = new Date();
-          scheduled.setHours(h);
-          scheduled.setMinutes(m - 5);
-          scheduled.setSeconds(0);
-
-          // 내일로 넘어가는 경우 처리
-          if (m < 5) scheduled.setHours(h - 1, m + 60 - 5);
-
-          const diff = Math.abs(now - scheduled);
-          if (diff < 60000 && !check.dataset.alerted) {
-            notify(`${group.toUpperCase()} 컨텐츠가 5분 후 시작됩니다!`);
-            check.dataset.alerted = "true";
+      document.querySelectorAll('.alarm5').forEach(input => {
+        if (!input.checked) return;
+        const group = input.dataset.group;
+        document.querySelectorAll(`#${group} tr`).forEach(row => {
+          const time = row.querySelector('td').innerText;
+          const [hh, mm] = time.split(':').map(Number);
+          const alarmTime = new Date(now);
+          alarmTime.setHours(hh, mm - 5, 0, 0);
+          const alarmStr = `${String(alarmTime.getHours()).padStart(2, '0')}:${String(alarmTime.getMinutes()).padStart(2, '0')}`;
+          if (alarmStr === current && !row.dataset.notified) {
+            notify(`⏰ ${group.toUpperCase()} 컨텐츠 알림 시간입니다! (${time})`);
+            row.dataset.notified = "true";
           }
-          if (now - scheduled > 60000) delete check.dataset.alerted;
         });
       });
-    }, 30000);
+    }
+
+    setInterval(checkAlarms, 60 * 1000); // 1분마다 체크
   </script>
 </body>
 </html>

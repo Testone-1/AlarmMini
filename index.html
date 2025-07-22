@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
+  <style>
+    :root {
+      --bg-color-light: #f5f5f5;
+      --text-color-light: #222;
+      --bg-color-dark: #1e1e1e;
+      --text-color-dark: #f0f0f0;
+      --accent-color: #3aa6ff;
+    }
+
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: var(--bg-color-light);
+      color: var(--text-color-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--bg-color-dark);
+      color: var(--text-color-dark);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .content {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section h2 {
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 0.5rem;
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+    }
+
+    #toggle-theme {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #ship-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      border: 1px solid gray;
+      border-radius: 5px;
+      margin-bottom: 2rem;
+      background-color: #ddd;
+    }
+
+    body.dark #ship-status {
+      background-color: #2a2a2a;
+    }
+  </style>
+</head>
+<body>
+  <button id="toggle-theme">🌗 테마 전환</button>
+  <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</h1>
+  <div class="content">
+
+    <!-- 함선 체크 -->
+    <div id="ship-status">
+      <span>🛳️ 오늘 함선 완료 여부:</span>
+      <button id="ship-toggle">❌ 미완료</button>
+    </div>
+
+    <!-- 보스존 -->
+    <div class="section">
+      <h2>(상급) 보스존</h2>
+      <label><span>오전 11:30</span><input type="checkbox" class="alert" data-time="11:30"></label>
+      <label><span>오후 2:30</span><input type="checkbox" class="alert" data-time="14:30"></label>
+      <label><span>오후 5:30</span><input type="checkbox" class="alert" data-time="17:30"></label>
+      <label><span>오후 9:30</span><input type="checkbox" class="alert" data-time="21:30"></label>
+      <label><span>오전 2:30</span><input type="checkbox" class="alert" data-time="02:30"></label>
+    </div>
+
+    <!-- 천하제일대회 -->
+    <div class="section">
+      <h2>천하제일대회</h2>
+      <label><span>오전 10:00</span><input type="checkbox" class="alert" data-time="10:00"></label>
+      <label><span>오후 1:00</span><input type="checkbox" class="alert" data-time="13:00"></label>
+      <label><span>오후 4:00</span><input type="checkbox" class="alert" data-time="16:00"></label>
+      <label><span>오후 8:00</span><input type="checkbox" class="alert" data-time="20:00"></label>
+      <label><span>오전 1:00</span><input type="checkbox" class="alert" data-time="01:00"></label>
+    </div>
+
+    <!-- 낚시대회 -->
+    <div class="section">
+      <h2>낚시대회</h2>
+      <label><span>오후 12:00</span><input type="checkbox" class="alert" data-time="12:00"></label>
+      <label><span>오후 3:00</span><input type="checkbox" class="alert" data-time="15:00"></label>
+      <label><span>오후 6:00</span><input type="checkbox" class="alert" data-time="18:00"></label>
+      <label><span>오후 10:00</span><input type="checkbox" class="alert" data-time="22:00"></label>
+    </div>
+
+    <!-- 공성전 -->
+    <div class="section">
+      <h2>공성전</h2>
+      <label><span>오후 9:00</span><input type="checkbox" class="alert" data-time="21:00"></label>
+    </div>
+  </div>
+
+  <!-- 알림 소리 -->
+  <audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
+
+  <script>
+    const toggleThemeBtn = document.getElementById("toggle-theme");
+    const shipToggleBtn = document.getElementById("ship-toggle");
+    const alertSound = document.getElementById("alert-sound");
+
+    // 다크 모드 전환
+    toggleThemeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+    });
+
+    // 함선 체크 토글
+    shipToggleBtn.addEventListener("click", () => {
+      const current = shipToggleBtn.textContent.includes("✅");
+      shipToggleBtn.textContent = current ? "❌ 미완료" : "✅ 완료";
+    });
+
+    // 알람 확인 반복
+    setInterval(() => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const currentTime = `${hh}:${mm}`;
+
+      document.querySelectorAll('.alert').forEach(input => {
+        if (input.checked && input.dataset.time === currentTime) {
+          alertSound.play();
+          alert(`⏰ ${currentTime} - 컨텐츠 시간입니다!`);
+        }
+      });
+    }, 60 * 1000); // 1분마다 검사
+  </script>
+</body>
+</html>

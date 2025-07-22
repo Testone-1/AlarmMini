@@ -3,69 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
+  <title>미니파이터 클래식 서버 일정표_By 꽃게랑</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
+      background-color: #fff;
       color: #333;
       margin: 0;
       padding: 20px;
     }
-    .dark-mode {
-      background-color: #2c2c2c;
-      color: #e0e0e0;
-    }
+
     h1 {
       text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 30px;
     }
-    #theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-    }
+
     #ship-status {
       text-align: center;
-      margin: 20px auto;
+      margin-bottom: 30px;
     }
+
     #ship-toggle {
-      margin-left: 10px;
-      padding: 5px 12px;
+      padding: 5px 10px;
+      font-size: 0.9rem;
     }
+
     .table-wrapper {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
-      gap: 20px;
+      justify-content: center;
+      gap: 30px;
     }
+
     .content-table {
-      border-collapse: collapse;
-      width: 300px;
-      max-width: 100%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin: 10px;
-    }
-    .content-table th, .content-table td {
       border: 1px solid #ccc;
-      padding: 8px;
+      border-radius: 6px;
+      width: 280px;
+      font-size: 0.9rem;
+    }
+
+    .content-table th {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
       text-align: center;
     }
-    .content-table th {
-      background-color: #f0f0f0;
+
+    .content-table td {
+      padding: 8px;
+      text-align: center;
+      border-top: 1px solid #eee;
     }
-    .dark-mode .content-table th {
-      background-color: #3a3a3a;
-    }
+
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-weight: normal;
     }
+
+    .section-header label {
+      font-weight: normal;
+      font-size: 0.85rem;
+    }
+
+    .section-header button {
+      margin-left: 5px;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+    }
+
     #alert-test {
-      float: right;
-      margin-top: 20px;
+      display: block;
+      margin: 30px auto 0 auto;
       padding: 8px 16px;
+      font-size: 0.9rem;
     }
+
     .popup {
       display: none;
       position: fixed;
@@ -76,17 +91,17 @@
       border: 1px solid #888;
       padding: 20px;
       z-index: 999;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
+
     .popup button {
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <button id="theme-toggle">🌙 다크모드</button>
 
-  <h1>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</h1>
+  <h1>미니파이터 클래식 서버 컨텐츠 일정표</h1>
 
   <div id="ship-status">
     <span>🛳️ 오늘 함선 완료 여부:</span>
@@ -94,15 +109,15 @@
   </div>
 
   <div class="table-wrapper">
-    <!-- 왼쪽 열 -->
+    <!-- 보스존 -->
     <table class="content-table">
       <thead>
         <tr>
           <th colspan="2" class="section-header">
             (상급)보스존
             <span>
-              <label>🔔5분 전 <input type="checkbox" id="alert-bosszone" /></label>
-              <button onclick="toggleAll(this, 'bosszone')">전체체크</button>
+              <label>🔔<input type="checkbox" id="alert-bosszone" /></label>
+              <button onclick="toggleAll(this, 'bosszone')">전체</button>
             </span>
           </th>
         </tr>
@@ -116,14 +131,15 @@
       </tbody>
     </table>
 
+    <!-- 천하제일 -->
     <table class="content-table">
       <thead>
         <tr>
           <th colspan="2" class="section-header">
             천하제일대회
             <span>
-              <label>🔔5분 전 <input type="checkbox" id="alert-chunha" /></label>
-              <button onclick="toggleAll(this, 'chunha')">전체체크</button>
+              <label>🔔<input type="checkbox" id="alert-chunha" /></label>
+              <button onclick="toggleAll(this, 'chunha')">전체</button>
             </span>
           </th>
         </tr>
@@ -137,15 +153,15 @@
       </tbody>
     </table>
 
-    <!-- 오른쪽 열 -->
+    <!-- 낚시 -->
     <table class="content-table">
       <thead>
         <tr>
           <th colspan="2" class="section-header">
             낚시대회
             <span>
-              <label>🔔5분 전 <input type="checkbox" id="alert-fish" /></label>
-              <button onclick="toggleAll(this, 'fish')">전체체크</button>
+              <label>🔔<input type="checkbox" id="alert-fish" /></label>
+              <button onclick="toggleAll(this, 'fish')">전체</button>
             </span>
           </th>
         </tr>
@@ -158,14 +174,15 @@
       </tbody>
     </table>
 
+    <!-- 공성전 -->
     <table class="content-table">
       <thead>
         <tr>
           <th colspan="2" class="section-header">
             공성전
             <span>
-              <label>🔔5분 전 <input type="checkbox" id="alert-war" /></label>
-              <button onclick="toggleAll(this, 'war')">전체체크</button>
+              <label>🔔<input type="checkbox" id="alert-war" /></label>
+              <button onclick="toggleAll(this, 'war')">전체</button>
             </span>
           </th>
         </tr>
@@ -178,55 +195,35 @@
 
   <button id="alert-test">🔔 알림 테스트 버튼 (5초 후 알림)</button>
 
-  <!-- 팝업 -->
+  <!-- 알림 사운드 -->
+  <audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/medium_bell_ringing_near.ogg" preload="auto"></audio>
+
+  <!-- 알림 허용 팝업 -->
   <div id="notify-popup" class="popup">
     📢 브라우저 알림이 꺼져 있습니다.<br />
-    알림을 받으려면 브라우저의 '알림 허용'을 설정해 주세요.<br />
+    알림을 받으려면 브라우저에서 '알림 허용'을 설정해 주세요.<br />
     <button onclick="closePopup()">닫기</button>
   </div>
 
-  <!-- 알림 소리 -->
-  <audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
-
   <script>
-    const toggle = document.getElementById("theme-toggle");
-    toggle.onclick = () => {
-      document.body.classList.toggle("dark-mode");
-      toggle.textContent = document.body.classList.contains("dark-mode") ? "☀️ 라이트모드" : "🌙 다크모드";
-    };
-
     document.getElementById("ship-toggle").onclick = function () {
-      const btn = this;
-      if (btn.textContent.includes("미완료")) {
-        btn.textContent = "✅ 완료";
-      } else {
-        btn.textContent = "❌ 미완료";
-      }
+      this.textContent = this.textContent.includes("미완료") ? "✅ 완료" : "❌ 미완료";
     };
 
     function toggleAll(btn, id) {
-      const table = document.getElementById(id);
-      const checkboxes = table.querySelectorAll("input[type='checkbox']");
+      const checkboxes = document.querySelectorAll(`#${id} input[type="checkbox"]`);
       const allChecked = Array.from(checkboxes).every(cb => cb.checked);
       checkboxes.forEach(cb => cb.checked = !allChecked);
     }
 
-    // 알림 테스트 버튼
-    document.getElementById("alert-test").onclick = () => {
-      setTimeout(() => {
-        showNotification("📢 테스트 알림입니다!");
-      }, 5000);
-    };
-
-    // 알림 표시
-    function showNotification(msg) {
+    function showNotification(message) {
       if (Notification.permission === "granted") {
-        new Notification(msg);
+        new Notification(message);
         document.getElementById("alert-sound").play();
       } else if (Notification.permission !== "denied") {
         Notification.requestPermission().then(permission => {
           if (permission === "granted") {
-            new Notification(msg);
+            new Notification(message);
             document.getElementById("alert-sound").play();
           } else {
             document.getElementById("notify-popup").style.display = "block";
@@ -241,14 +238,18 @@
       document.getElementById("notify-popup").style.display = "none";
     }
 
-    // 처음 접속 시 알림 허용 팝업 체크
+    document.getElementById("alert-test").onclick = () => {
+      setTimeout(() => showNotification("🔔 테스트 알림입니다!"), 5000);
+    };
+
     window.onload = () => {
       if (Notification.permission !== "granted") {
         setTimeout(() => {
           document.getElementById("notify-popup").style.display = "block";
-        }, 1500);
+        }, 1000);
       }
     };
   </script>
+
 </body>
 </html>

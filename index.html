@@ -355,34 +355,83 @@
       }
     }
 
-    // 5분 전 알림 작동
-    setInterval(() => {
-      const now = new Date();
-      const h = now.getHours();
-      const m = now.getMinutes();
-      const currentHM = `${h.toString().padStart(2,"0")}:${m.toString().padStart(2,"0")}`;
+    // 중복 알림 방지용 Set
+    const notifiedTimes = new Set();
 
-      const alarmCheckboxes = document.querySelectorAll(".alarm5");
-      alarmCheckboxes.forEach(alarmCheckbox => {
-        if (!alarmCheckbox.checked) return;
-        const groupId = alarmCheckbox.dataset.group;
+    // 1초 단위로 체크해서 정확한 시간에 알림 울리도록 함
+    function checkAlarms() {
+      const now = new Date();
+
+      // 체크할 그룹 아이디들
+      const groups = ['boss', 'match', 'fish', 'castle'];
+
+      groups.forEach(groupId => {
         const rows = document.querySelectorAll(`#${groupId} tr`);
+        const alarm5Checkbox = document.querySelector(`input.alarm5[data-group="${groupId}"]`);
+
         rows.forEach(row => {
           const timeStr = row.cells[0].textContent.trim();
-          const [th, tm] = timeStr.split(":").map(Number);
-          const alarmDate = new Date(now);
-          alarmDate.setHours(th);
-          alarmDate.setMinutes(tm - 5);
-          alarmDate.setSeconds(0);
-          const alarmHM = `${alarmDate.getHours().toString().padStart(2,"0")}:${alarmDate.getMinutes().toString().padStart(2,"0")}`;
+          const [hourStr, minStr] = timeStr.split(":");
+          const targetHour = parseInt(hourStr, 10);
+          const targetMin = parseInt(minStr, 10);
 
-          if (currentHM === alarmHM) {
-            notify(`⏰ ${groupId} 컨텐츠가 5분 후 시작됩니다!`);
+          const timeCheckbox = row.querySelector('input[type="checkbox"]');
+          if (!timeCheckbox) return;
+
+          // 5분 전 알림 체크박스가 체크된 경우
+          if (alarm5Checkbox && alarm5Checkbox.checked) {
+            const alarmDate = new Date(now);
+            alarmDate.setHours(targetHour);
+            alarmDate.setMinutes(targetMin - 5);
+            alarmDate.setSeconds(0);
+            alarmDate.setMilliseconds(0);
+
+            const diffMs = alarmDate - now;
+            if (diffMs >= 0 && diffMs < 1000) {
+              const key = `5min_${groupId}_${timeStr}`;
+              if (!notifiedTimes.has(key)) {
+                notify(`⏰ ${groupId} 컨텐츠가 5분 후 시작됩니다! (${timeStr})`);
+                notifiedTimes.add(key);
+                setTimeout(() => { notifiedTimes.delete(key); }, 60000);
+              }
+            }
+          }
+
+          // 각 시간별 체크박스가 체크된 경우, 정확한 시간 알림
+          if (timeCheckbox.checked) {
+            const exactDate = new Date(now);
+            exactDate.setHours(targetHour);
+            exactDate.setMinutes(targetMin);
+            exactDate.setSeconds(0);
+            exactDate.setMilliseconds(0);
+
+            const diffMsExact = exactDate - now;
+            if (diffMsExact >= 0 && diffMsExact < 1000) {
+              const key = `exact_${groupId}_${timeStr}`;
+              if (!notifiedTimes.has(key)) {
+                notify(`⏰ ${groupId} 컨텐츠 시작 시간입니다! (${timeStr})`);
+                notifiedTimes.add(key);
+                setTimeout(() => { notifiedTimes.delete(key); }, 60000);
+              }
+            }
           }
         });
       });
-    }, 60 * 1000); // 매분 1회 체크
+    }
 
+    // 정확한 1초 단위 맞춤 후 시작
+    function scheduleCheck() {
+      const now = new Date();
+      const ms = now.getMilliseconds();
+      const delay = 1000 - ms;
+      setTimeout(() => {
+        checkAlarms();
+        setInterval(checkAlarms, 1000);
+      }, delay);
+    }
+
+    scheduleCheck();
+    
     // 볼륨 조절 이벤트
     document.getElementById("volume").addEventListener("input", function () {
       const sound = getSelectedSoundElement();

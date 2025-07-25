@@ -375,8 +375,7 @@
           eventDate.setSeconds(0, 0);
           eventDate.setHours(targetHour, targetMin, 0, 0);
 
-          // 이미 지난 시간이면 다음날로 넘김
-          if (eventDate.getTime() <= now.getTime() - 1000) {
+          if (eventDate.getTime() <= now.getTime() - 60000) { // 1분 이상 지났으면 내일로
             eventDate.setDate(eventDate.getDate() + 1);
           }
 
@@ -389,8 +388,8 @@
             alarmDate.setMinutes(alarmDate.getMinutes() - 5);
 
             const diffMs = alarmDate.getTime() - now.getTime();
-            if (diffMs >= 0 && diffMs < 2000) {
-              const key = `5min_${groupId}_${timeStr}_${eventDate.getDate()}`;
+            if (Math.abs(diffMs) < 60000) { // 1분 이내면 울리기
+              const key = `5min_${groupId}_${timeStr}_${alarmDate.toDateString()}`;
               if (!notifiedTimes.has(key)) {
                 notify(`⏰ ${groupId} 컨텐츠가 5분 후 시작됩니다! (${timeStr})`);
                 notifiedTimes.add(key);
@@ -402,8 +401,8 @@
           // 정각 알림 (체크된 경우)
           if (timeCheckbox.checked) {
             const diffMsExact = eventDate.getTime() - now.getTime();
-            if (diffMsExact >= 0 && diffMsExact < 2000) {
-              const key = `exact_${groupId}_${timeStr}_${eventDate.getDate()}`;
+            if (Math.abs(diffMsExact) < 60000) {
+              const key = `exact_${groupId}_${timeStr}_${eventDate.toDateString()}`;
               if (!notifiedTimes.has(key)) {
                 notify(`⏰ ${groupId} 컨텐츠 시작 시간입니다! (${timeStr})`);
                 notifiedTimes.add(key);

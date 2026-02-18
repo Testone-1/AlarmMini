@@ -1,1 +1,1 @@
-# AlarmMini
+# Coefficient Mini

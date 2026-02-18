@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --bg: #0f172a;
+      --bg: #020617;
       --card: #1e293b;
       --accent: #38bdf8;
       --text: #e5e7eb;
@@ -26,43 +26,43 @@
 
     .container {
       width: 100%;
-      max-width: 420px;
-      padding: 20px;
+      max-width: 520px;   /* ⬅ 가로 폭 확장 */
+      padding: 24px;
     }
 
     .card {
       background: var(--card);
-      border-radius: 16px;
-      padding: 24px;
+      border-radius: 18px;
+      padding: 26px 34px; /* ⬅ 좌우 padding 확장 (핵심) */
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
     h1 {
       text-align: center;
       font-size: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       color: var(--accent);
-      letter-spacing: 0.5px;
     }
 
     .desc {
-      font-size: 13px;
+      font-size: 13.5px;
       color: var(--sub);
-      line-height: 1.6;
-      margin-bottom: 16px;
+      line-height: 1.7;
+      margin-bottom: 22px;
+      word-break: keep-all; /* ⬅ 한글 줄 깨짐 방지 */
     }
 
     label {
       display: block;
-      margin-top: 14px;
+      margin-top: 16px;
       font-size: 14px;
     }
 
     input {
       width: 100%;
-      margin-top: 6px;
-      padding: 12px;
-      border-radius: 10px;
+      margin-top: 8px;
+      padding: 14px;
+      border-radius: 12px;
       border: none;
       background: #020617;
       color: var(--text);
@@ -76,9 +76,9 @@
 
     button {
       width: 100%;
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 12px;
+      margin-top: 22px;
+      padding: 15px;
+      border-radius: 14px;
       border: none;
       background: linear-gradient(135deg, #38bdf8, #0ea5e9);
       color: #020617;
@@ -87,31 +87,28 @@
       cursor: pointer;
     }
 
-    button:hover {
-      filter: brightness(1.1);
-    }
-
     .result {
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 12px;
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 14px;
       background: #020617;
       text-align: center;
-      font-size: 18px;
+      font-size: 19px;
       font-weight: bold;
       color: var(--accent);
     }
 
     .notice {
-      margin-top: 14px;
-      font-size: 12px;
+      margin-top: 20px;
+      font-size: 13px;
       color: var(--sub);
-      line-height: 1.6;
+      line-height: 1.7;
+      word-break: keep-all;
     }
 
     footer {
       text-align: center;
-      margin-top: 18px;
+      margin-top: 20px;
       font-size: 12px;
       color: #64748b;
     }
@@ -119,54 +116,53 @@
 </head>
 <body>
 
-  <div class="container">
-    <div class="card">
-      <h1>미니파이터 계수 계산기</h1>
+<div class="container">
+  <div class="card">
+    <h1>미니파이터 계수 계산기</h1>
 
-      <div class="desc">
-        대미지는 <strong>[그린힐]</strong>의 <strong>구스 / 샤비</strong>를 공격했을 때의 값으로 입력하세요.<br>
-        스탯은 계수를 알고자 하는 <strong>스킬 혹은 필살기</strong>의 값을 입력하세요.
-      </div>
-
-      <label>대미지</label>
-      <input type="number" id="damage" placeholder="예: 1520">
-
-      <label>스탯</label>
-      <input type="number" id="stat" placeholder="예: 340">
-
-      <button onclick="calculate()">계수 계산</button>
-
-      <div class="result" id="result">
-        계수: -
-      </div>
-
-      <div class="notice">
-        스탯이 높을수록 대미지의 편차가 커지므로,<br>
-        <strong>베이직 등급</strong>으로 확인하는 것이 좋습니다.
-      </div>
+    <div class="desc">
+      대미지는 <strong>[그린힐]</strong>의 <strong>구스 / 샤비</strong>를 공격했을 때의 값으로 입력하세요.<br>
+      스탯은 계수를 알고자 하는 <strong>스킬 혹은 필살기</strong>의 값을 입력하세요.
     </div>
 
-    <footer>
-      Made by 꽃게랑
-    </footer>
+    <label>대미지</label>
+    <input type="number" id="damage" placeholder="예: 550">
+
+    <label>스탯</label>
+    <input type="number" id="stat" placeholder="예: 796">
+
+    <button onclick="calculate()">계수 계산</button>
+
+    <div class="result" id="result">
+      계수: -
+    </div>
+
+    <div class="notice">
+      스탯이 높을수록 대미지의 편차가 커지므로,<br>
+      <strong>베이직 혹은 유니크 등급</strong>으로 <strong>장비를 모두 해제한 후</strong> 확인하는 것이 좋습니다.
+    </div>
   </div>
 
-  <script>
-    function calculate() {
-      const damage = Number(document.getElementById("damage").value);
-      const stat = Number(document.getElementById("stat").value);
+  <footer>
+    Made by 꽃게랑
+  </footer>
+</div>
 
-      if (!damage || !stat) {
-        document.getElementById("result").innerText = "값을 모두 입력하세요";
-        return;
-      }
+<script>
+  function calculate() {
+    const damage = Number(document.getElementById("damage").value);
+    const stat = Number(document.getElementById("stat").value);
+    const resultEl = document.getElementById("result");
 
-      const coefficient = (damage + 320) / stat;
-
-      document.getElementById("result").innerText =
-        "계수: " + coefficient.toFixed(3);
+    if (!damage || !stat) {
+      resultEl.innerText = "값을 모두 입력하세요";
+      return;
     }
-  </script>
+
+    const coefficient = (damage + 320) / stat;
+    resultEl.innerText = "계수: " + coefficient.toFixed(3);
+  }
+</script>
 
 </body>
 </html>

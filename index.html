@@ -1,443 +1,172 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>미니파이터 클래식 서버 컨텐츠 일정표_By 꽃게랑</title>
+  <meta charset="UTF-8">
+  <title>미니파이터 계수 계산기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --bg-color: #1e1e1e;
-      --text-color: #f0f0f0;
-      --table-bg: #ffffff;
-      --table-text: #000000;
-    }
-
-    body.light {
-      --bg-color: #f9f9f9;
-      --text-color: #333333;
-      --table-bg: #ffffff;
-      --table-text: #000000;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --text: #e5e7eb;
+      --sub: #94a3b8;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      background: linear-gradient(180deg, #020617, #0f172a);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
       padding: 20px;
-      margin: auto;
-      max-width: 960px;
-      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
     h1 {
       text-align: center;
-      position: relative;
-      margin-bottom: 60px;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--accent);
+      letter-spacing: 0.5px;
     }
 
-    .mode-box {
-      position: absolute;
-      right: 0;
-      bottom: -60px;
-      text-align: right;
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    .mode-toggle {
-      padding: 5px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--text-color);
-      background-color: transparent;
-      color: var(--text-color);
-      cursor: pointer;
+    .desc {
       font-size: 13px;
+      color: var(--sub);
+      line-height: 1.6;
+      margin-bottom: 16px;
     }
 
-    #ship-status {
-      margin: 20px 0 30px;
+    label {
+      display: block;
+      margin-top: 14px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #020617;
+      color: var(--text);
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    input:focus {
+      outline: 2px solid var(--accent);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #020617;
       font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      filter: brightness(1.1);
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #020617;
       text-align: center;
-    }
-
-    #ship-toggle {
-      margin-left: 10px;
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 14px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .container {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .table-group {
-      width: 45%;
-      min-width: 300px;
-    }
-
-    .group-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       font-size: 18px;
-      margin: 20px 0 10px;
+      font-weight: bold;
+      color: var(--accent);
     }
 
-    .group-title label {
-      font-size: 13px;
+    .notice {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.6;
     }
 
-    table {
-      width: 100%;
-      font-size: 14px;
-      border-collapse: collapse;
-      background-color: var(--table-bg);
-      color: var(--table-text);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    td {
-      padding: 6px 8px;
-    }
-
-    td:first-child {
-      width: 100%;
-    }
-
-    input[type="checkbox"] {
-      transform: scale(1.2);
-      margin-left: 6px;
-    }
-
-    .bottom-right-controls {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #444;
-      padding: 10px 14px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px #00000066;
-      flex-wrap: nowrap;
-    }
-
-    .test-button {
-      padding: 8px 16px;
-      font-size: 14px;
-      border: none;
-      background-color: #28a745;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    #volume {
-      width: 120px;
-      vertical-align: middle;
-    }
-
-    .sound-select {
-      color: white;
-      font-size: 13px;
-      user-select: none;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-left: 12px;
-    }
-
-    .sound-select input[type="radio"] {
-      transform: scale(1.1);
-      cursor: pointer;
-    }
-
-    .volume-icon {
-      font-size: 18px;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 6px;
-      user-select: none;
-    }
-
-    .popup {
-      background-color: #444;
-      color: #fff;
-      padding: 15px;
-      border-radius: 6px;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999;
-      box-shadow: 0 0 8px #00000066;
+    footer {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 12px;
+      color: #64748b;
     }
   </style>
 </head>
 <body>
-  <h1>
-    미니파이터 클래식 서버 컨텐츠 일정표
-    <div class="mode-box">
-      <button class="mode-toggle" onclick="toggleMode()">🌙 다크 모드</button><br>
-      브라우저 설정에서 알림을 허용해야 알림이 표시됩니다.<br>
-      브라우저를 끈 상태에서는 작동하지 않습니다.
-    </div>
-  </h1>
-
-  <div id="ship-status">
-    <span>🛳️ 오늘 함선 완료 여부:</span>
-    <button id="ship-toggle">❌ 미완료</button>
-  </div>
 
   <div class="container">
-    <!-- 왼쪽 열 -->
-    <div class="table-group">
-      <div class="group-title">
-        <span>(상급)보스존</span>
-        <span>
-          <label><input type="checkbox" data-group="boss" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('boss')">전체 체크</button>
-        </span>
-      </div>
-      <table>
-        <tbody id="boss">
-          <tr><td>11:30</td><td><input type="checkbox"></td></tr>
-          <tr><td>14:30</td><td><input type="checkbox"></td></tr>
-          <tr><td>17:30</td><td><input type="checkbox"></td></tr>
-          <tr><td>21:30</td><td><input type="checkbox"></td></tr>
-          <tr><td>02:30</td><td><input type="checkbox"></td></tr>
-        </tbody>
-      </table>
+    <div class="card">
+      <h1>미니파이터 계수 계산기</h1>
 
-      <div class="group-title">
-        <span>천하제일대회</span>
-        <span>
-          <label><input type="checkbox" data-group="match" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('match')">전체 체크</button>
-        </span>
+      <div class="desc">
+        대미지는 <strong>[그린힐]</strong>의 <strong>구스 / 샤비</strong>를 공격했을 때의 값으로 입력하세요.<br>
+        스탯은 계수를 알고자 하는 <strong>스킬 혹은 필살기</strong>의 값을 입력하세요.
       </div>
-      <table>
-        <tbody id="match">
-          <tr><td>10:00</td><td><input type="checkbox"></td></tr>
-          <tr><td>13:00</td><td><input type="checkbox"></td></tr>
-          <tr><td>16:00</td><td><input type="checkbox"></td></tr>
-          <tr><td>20:00</td><td><input type="checkbox"></td></tr>
-          <tr><td>01:00</td><td><input type="checkbox"></td></tr>
-        </tbody>
-      </table>
+
+      <label>대미지</label>
+      <input type="number" id="damage" placeholder="예: 1520">
+
+      <label>스탯</label>
+      <input type="number" id="stat" placeholder="예: 340">
+
+      <button onclick="calculate()">계수 계산</button>
+
+      <div class="result" id="result">
+        계수: -
+      </div>
+
+      <div class="notice">
+        스탯이 높을수록 대미지의 편차가 커지므로,<br>
+        <strong>베이직 등급</strong>으로 확인하는 것이 좋습니다.
+      </div>
     </div>
 
-    <!-- 오른쪽 열 -->
-    <div class="table-group">
-      <div class="group-title">
-        <span>낚시대회</span>
-        <span>
-          <label><input type="checkbox" data-group="fish" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('fish')">전체 체크</button>
-        </span>
-      </div>
-      <table>
-        <tbody id="fish">
-          <tr><td>12:00</td><td><input type="checkbox"></td></tr>
-          <tr><td>15:00</td><td><input type="checkbox"></td></tr>
-          <tr><td>18:00</td><td><input type="checkbox"></td></tr>
-          <tr><td>22:00</td><td><input type="checkbox"></td></tr>
-        </tbody>
-      </table>
-
-      <div class="group-title">
-        <span>공성전</span>
-        <span>
-          <label><input type="checkbox" data-group="castle" class="alarm5"> 5분 전 알림</label>
-          <button onclick="toggleGroup('castle')">전체 체크</button>
-        </span>
-      </div>
-      <table>
-        <tbody id="castle">
-          <tr><td>21:00</td><td><input type="checkbox"></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <footer>
+      Made by 꽃게랑
+    </footer>
   </div>
-
-  <!-- 고정 우측 하단: 알림 테스트 버튼 & 볼륨 & 알림음 선택 -->
-  <div class="bottom-right-controls">
-    <button class="test-button" onclick="testNotification()">🔔 알림 테스트 버튼 (5초 후 알림)</button>
-    <span class="volume-icon">🔉</span>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
-
-    <label class="sound-select">
-      <input type="radio" name="alarmSound" value="rad" checked />
-      방사능계측기
-    </label>
-    <label class="sound-select">
-      <input type="radio" name="alarmSound" value="bugle" />
-      버글 튠
-    </label>
-    <label class="sound-select">
-      <input type="radio" name="alarmSound" value="alarm" />
-      알람 시계
-    </label>
-  </div>
-
-  <audio id="sound-rad" src="https://actions.google.com/sounds/v1/alarms/radiation_meter.ogg" preload="auto"></audio>
-  <audio id="sound-bugle" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
-  <audio id="sound-alarm" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
 
   <script>
-    function toggleMode() {
-      const body = document.body;
-      const btn = document.querySelector('.mode-toggle');
-      body.classList.toggle("light");
-      btn.textContent = body.classList.contains("light") ? "☀️ 라이트 모드" : "🌙 다크 모드";
-    }
+    function calculate() {
+      const damage = Number(document.getElementById("damage").value);
+      const stat = Number(document.getElementById("stat").value);
 
-    document.getElementById("ship-toggle").addEventListener("click", function() {
-      const btn = this;
-      if (btn.textContent.includes("미완료")) {
-        btn.textContent = "✅ 완료";
-        btn.style.backgroundColor = "#28a745";
-      } else {
-        btn.textContent = "❌ 미완료";
-        btn.style.backgroundColor = "#007BFF";
+      if (!damage || !stat) {
+        document.getElementById("result").innerText = "값을 모두 입력하세요";
+        return;
       }
-    });
 
-    function toggleGroup(groupId) {
-      const checkboxes = document.querySelectorAll("#" + groupId + " input[type='checkbox']");
-      const allChecked = [...checkboxes].every(c => c.checked);
-      checkboxes.forEach(c => c.checked = !allChecked);
+      const coefficient = (damage + 320) / stat;
+
+      document.getElementById("result").innerText =
+        "계수: " + coefficient.toFixed(3);
     }
-
-    // 알림 권한 요청 및 안내
-    if (Notification.permission !== "granted") {
-      setTimeout(() => {
-        alert("🔔 알림을 받기 위해 브라우저 설정에서 알림 허용으로 변경해주세요!");
-        Notification.requestPermission();
-      }, 500);
-    }
-
-    function getSelectedSoundElement() {
-      const selected = document.querySelector('input[name="alarmSound"]:checked').value;
-      if (selected === "rad") return document.getElementById("sound-rad");
-      if (selected === "bugle") return document.getElementById("sound-bugle");
-      if (selected === "alarm") return document.getElementById("sound-alarm");
-      return document.getElementById("sound-bugle"); // 기본값
-    }
-
-    function playSelectedSound() {
-      const sound = getSelectedSoundElement();
-      sound.volume = document.getElementById("volume").value;
-      sound.currentTime = 0;
-      sound.play();
-    }
-
-    function testNotification() {
-      setTimeout(() => {
-        notify("⏰ 테스트 알림입니다!");
-      }, 5000);
-    }
-
-    function notify(message) {
-      if (Notification.permission === "granted") {
-        new Notification(message);
-        playSelectedSound();
-      }
-    }
-
-    const notifiedTimes = new Set();
-
-    function checkAlarms() {
-      const now = new Date();
-
-      const groups = ['boss', 'match', 'fish', 'castle'];
-
-      groups.forEach(groupId => {
-        const rows = document.querySelectorAll("#" + groupId + " tr");
-        const alarm5Checkbox = document.querySelector(`input.alarm5[data-group="${groupId}"]`);
-
-        rows.forEach(row => {
-          const timeStr = row.cells[0].textContent.trim();
-          const [hourStr, minStr] = timeStr.split(":");
-          let targetHour = parseInt(hourStr, 10);
-          let targetMin = parseInt(minStr, 10);
-
-          let eventDate = new Date(now);
-          eventDate.setSeconds(0, 0);
-          eventDate.setHours(targetHour, targetMin, 0, 0);
-
-          if (eventDate.getTime() <= now.getTime() - 60000) { // 1분 이상 지났으면 내일로
-            eventDate.setDate(eventDate.getDate() + 1);
-          }
-
-          const timeCheckbox = row.querySelector('input[type="checkbox"]');
-          if (!timeCheckbox) return;
-
-          // 5분 전 알림
-          if (alarm5Checkbox && alarm5Checkbox.checked) {
-            let alarmDate = new Date(eventDate);
-            alarmDate.setMinutes(alarmDate.getMinutes() - 5);
-
-            const diffMs = alarmDate.getTime() - now.getTime();
-            if (Math.abs(diffMs) < 60000) { // 1분 이내면 울리기
-              const key = `5min_${groupId}_${timeStr}_${alarmDate.toDateString()}`;
-              if (!notifiedTimes.has(key)) {
-                notify(`⏰ ${groupId} 컨텐츠가 5분 후 시작됩니다! (${timeStr})`);
-                notifiedTimes.add(key);
-                setTimeout(() => { notifiedTimes.delete(key); }, 65000);
-              }
-            }
-          }
-
-          // 정각 알림 (체크된 경우)
-          if (timeCheckbox.checked) {
-            const diffMsExact = eventDate.getTime() - now.getTime();
-            if (Math.abs(diffMsExact) < 60000) {
-              const key = `exact_${groupId}_${timeStr}_${eventDate.toDateString()}`;
-              if (!notifiedTimes.has(key)) {
-                notify(`⏰ ${groupId} 컨텐츠 시작 시간입니다! (${timeStr})`);
-                notifiedTimes.add(key);
-                setTimeout(() => { notifiedTimes.delete(key); }, 65000);
-              }
-            }
-          }
-        });
-      });
-    }
-
-    function scheduleCheck() {
-      function nextTick() {
-        checkAlarms();
-        const now = new Date();
-        const ms = now.getMilliseconds();
-        setTimeout(nextTick, 1000 - ms);
-      }
-      nextTick();
-    }
-
-    scheduleCheck();
-
-    document.getElementById("volume").addEventListener("input", function () {
-      const sound = getSelectedSoundElement();
-      sound.volume = this.value;
-    });
   </script>
-
-  <!-- 방문자 수 카운터 - 왼쪽 하단 고정 -->
-  <div style="position: fixed; bottom: 10px; left: 10px; z-index: 999;">
-    <a href="https://hits.sh/testone-1.github.io/AlarmMini/">
-      <img alt="Hits" src="https://hits.sh/testone-1.github.io/AlarmMini.svg?view=today-total&style=plastic&label=%EB%B0%A9%EB%AC%B8%EC%9E%90%20%EC%88%98%20%3A%20%EC%98%A4%EB%8A%98%20%2F%20%EC%A0%84%EC%B2%B4&color=2ba9fc"/>
-    </a>
-  </div>
 
 </body>
 </html>
